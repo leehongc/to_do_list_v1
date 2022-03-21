@@ -6,10 +6,13 @@ const bodyParser = require("body-parser");
 const app = express();
 
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static("public"));
 
-var items = [];
+let items = [];
+let workItems = [];
 
 app.get("/", function(req, res) {
 
@@ -18,18 +21,41 @@ app.get("/", function(req, res) {
   var options = {
     weekday: 'long',
     month: 'long',
-    day: 'numeric' };
+    day: 'numeric'
+  };
   var day = today.toLocaleDateString("en-US", options);
 
-  res.render("list", {kindOfDay: day, newListItems: items});
+  res.render("list", {
+    listTitle: day,
+    newListItems: items
+  });
 });
 
-app.post("/", function(req, res) {
-var item = req.body.newItem;
-items.push(item);
 
-res.redirect("/");
+app.post("/", function(req, res) {
+  let item = req.body.newItem;
+
+  if (req.body.list === "WorkList") {
+    workItems.push(item);
+    res.redirect("/work");
+  } else {
+    items.push(item);
+    res.redirect("/");
+  };
 })
+
+app.get("/about", function(req, res){
+  res.render("about");
+});
+
+
+app.get("/work", function(req, res) {
+  res.render("list", {
+    listTitle: "WorkList",
+    newListItems: workItems
+  });
+})
+
 
 app.listen(3000, function() {
   console.log("Server is running on port 3000.")
