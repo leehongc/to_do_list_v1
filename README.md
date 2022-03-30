@@ -1,3 +1,3 @@
 # To Do List V1
 
-This is an exericise from The App Brewery's Fullstack Web Development Course.
+This is to do list is a project created from The App Brewery's Fullstack Web Development Course.
